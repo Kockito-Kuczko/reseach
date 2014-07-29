@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+	    <!-- External libraries -->
+		<script src="libs/jquery_2.1.0.js"></script>
+	    <script src="libs/three.js"></script>
+	    <script src="libs/physi.js"></script>
+	
+		<!-- Custom resources -->
+		<script src=""></script>
+		
+		<!-- Custom style -->
+		<link type="text/css" rel="stylesheet" href="style.css"/>
+	
+	</head>
+
+	<body>
+		<div id="viewport"></div>
+	
+		<script>
+			'use strict';
+	
+			Physijs.scripts.worker = 'libs/physijs_worker.js';
+			Physijs.scripts.ammo = 'ammo.js';
+	
+			var initScene, render, renderer, scene, camera, box;
+	
+			initScene = function() {
+				renderer = new THREE.WebGLRenderer({ antialias: true });
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.getElementById( 'viewport' ).appendChild( renderer.domElement );
+				
+				scene = new Physijs.Scene;
+				
+				camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 1000);
+				camera.position.set( 60, 50, 60 );
+				camera.lookAt( scene.position );
+				scene.add( camera );
+				
+				// Box
+				box = new Physijs.BoxMesh(
+					new THREE.BoxGeometry( 5, 5, 5 ),
+					new THREE.MeshBasicMaterial({ color: 0x888888 })
+				);
+				scene.add( box );
+				
+				requestAnimationFrame(render);
+			};
+	
+			render = function() {
+				scene.simulate();
+				renderer.render( scene, camera);
+				requestAnimationFrame( render );
+			};
+	
+			window.onload = initScene;
+		</script>
+	</body>
+</html>
+    
