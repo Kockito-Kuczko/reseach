@@ -27,38 +27,67 @@
 			Physijs.scripts.worker = 'libs/physijs_worker.js';
 			Physijs.scripts.ammo = 'ammo.js';
 	
-			var initScene, render, renderer, scene, camera, box;
+			var initScene, render, renderer, scene, camera, ground, box, box_2;
 	
 			initScene = function() {
-				renderer = new THREE.WebGLRenderer({ antialias: true });
+				renderer = new THREE.WebGLRenderer({antialias: true});
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				document.getElementById( 'viewport' ).appendChild( renderer.domElement );
+				document.getElementById('viewport').appendChild(renderer.domElement);
 				
 				scene = new Physijs.Scene;
 				
 				camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 1000);
-				camera.position.set( 60, 50, 60 );
-				camera.lookAt( scene.position );
-				scene.add( camera );
+				camera.position.set(60, 50, 60);
+				camera.lookAt(scene.position);
+				scene.add(camera);
 				
+				var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+				scene.add( light );
+				
+				// Add ground
+				ground = new Physijs.BoxMesh( // Physijs mesh
+					new THREE.BoxGeometry(15, 15, 2), // Three.js geometry
+					Physijs.createMaterial( // Physijs material
+						new THREE.MeshLambertMaterial({ // Three.js material
+							color: 0xeeeeee
+						}),
+						0.4, // friction
+						0.8 // restitution
+					),
+					0.0 // weight, 0 is for zero gravity
+				);
+
+				ground.rotation.x += Math.PI / 2;
+				ground.position.y -= 10;
+				scene.add(ground);
+
 				// Box
 				box = new Physijs.BoxMesh(
-					new THREE.BoxGeometry( 5, 5, 5 ),
-					new THREE.MeshBasicMaterial({ color: 0x888888 })
+					new THREE.BoxGeometry(5, 5, 5),
+					new THREE.MeshBasicMaterial({color: 0x0099aa})
+					//new THREE.MeshPhongMaterial({color: 0xee0022, ambient: 0x030303, specular: 0x009900, shininess: 30, shading: THREE.FlatShading})
 				);
-				scene.add( box );
+				scene.add(box);
+				
+				box_2 = new Physijs.BoxMesh(
+					new THREE.BoxGeometry(5, 5, 5),
+					new THREE.MeshBasicMaterial({color: 0x0099aa})
+					//new THREE.MeshPhongMaterial({color: 0xee0022, ambient: 0x030303, specular: 0x009900, shininess: 30, shading: THREE.FlatShading})
+				);
+				box_2.position.y += 20;
+				box_2.position.x += 4;
+				scene.add(box_2);
 				
 				requestAnimationFrame(render);
 			};
 	
 			render = function() {
 				scene.simulate();
-				renderer.render( scene, camera);
-				requestAnimationFrame( render );
+				renderer.render(scene, camera);
+				requestAnimationFrame(render);
 			};
 	
 			window.onload = initScene;
 		</script>
 	</body>
 </html>
-    
