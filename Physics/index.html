@@ -27,7 +27,7 @@
 			Physijs.scripts.worker = 'libs/physijs_worker.js';
 			Physijs.scripts.ammo = 'ammo.js';
 	
-			var initScene, render, renderer, scene, camera, ground, box, box_2;
+			var initScene, render, renderer, scene, camera, box_1, box_2, deflector_1, deflector_2;
 	
 			initScene = function() {
 				renderer = new THREE.WebGLRenderer({antialias: true});
@@ -41,40 +41,82 @@
 				camera.lookAt(scene.position);
 				scene.add(camera);
 				
-				var light = new THREE.AmbientLight( 0x404040 ); // soft white light
-				scene.add( light );
+				// Add some light
+				var ambient_light = new THREE.AmbientLight( 0x404040 ); // soft white light
+				scene.add(ambient_light);
 				
-				// Add ground
-				ground = new Physijs.BoxMesh( // Physijs mesh
-					new THREE.BoxGeometry(15, 15, 2), // Three.js geometry
-					Physijs.createMaterial( // Physijs material
-						new THREE.MeshLambertMaterial({ // Three.js material
+				var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+				directionalLight.position.set(0, 1, 0);
+				scene.add(directionalLight);
+				
+				// Add deflectors
+				deflector_1 = new Physijs.BoxMesh( 
+					new THREE.BoxGeometry(15, 15, 2),
+					Physijs.createMaterial(
+						new THREE.MeshLambertMaterial({
 							color: 0xeeeeee
 						}),
 						0.4, // friction
-						0.8 // restitution
+						0.8  // restitution
 					),
 					0.0 // weight, 0 is for zero gravity
 				);
 
-				ground.rotation.x += Math.PI / 2;
-				ground.position.y -= 10;
-				scene.add(ground);
+				deflector_1.rotation.x += Math.PI / -2.5;
+				deflector_1.position.y += 10;
+				
+				deflector_2 = new Physijs.BoxMesh( // Physijs mesh
+						new THREE.BoxGeometry(15, 15, 2), // Three.js geometry
+						Physijs.createMaterial( // Physijs material
+							new THREE.MeshLambertMaterial({ // Three.js material
+								color: 0xeeeeee
+							}),
+							0.4, // friction
+							0.8 // restitution
+						),
+						0.0 // weight, 0 is for zero gravity
+					);
+
+					deflector_2.rotation.x += Math.PI / 2.5;
+					deflector_2.position.z += 20;
+				
+				
+				scene.add(deflector_1);
+				scene.add(deflector_2);
 
 				// Box
-				box = new Physijs.BoxMesh(
+				box_1 = new Physijs.BoxMesh(
 					new THREE.BoxGeometry(5, 5, 5),
-					new THREE.MeshBasicMaterial({color: 0x0099aa})
-					//new THREE.MeshPhongMaterial({color: 0xee0022, ambient: 0x030303, specular: 0x009900, shininess: 30, shading: THREE.FlatShading})
+					Physijs.createMaterial( // Physijs material
+						new THREE.MeshLambertMaterial({
+							color: 0xffffff,
+							ambient: 0xff0303,
+							specular: 0x009900,
+							shininess: 2,
+							shading: THREE.FlatShading}),
+							0.1, // friction
+							0.1  // restitution
+						),
+						10.0 // weight, 0 is for zero gravity
 				);
-				scene.add(box);
+				box_1.position.y += 45;
+				scene.add(box_1);
 				
 				box_2 = new Physijs.BoxMesh(
 					new THREE.BoxGeometry(5, 5, 5),
-					new THREE.MeshBasicMaterial({color: 0x0099aa})
-					//new THREE.MeshPhongMaterial({color: 0xee0022, ambient: 0x030303, specular: 0x009900, shininess: 30, shading: THREE.FlatShading})
+					Physijs.createMaterial( // Physijs material
+						new THREE.MeshLambertMaterial({
+							color: 0xffaabb,
+							ambient: 0xff03f3,
+							specular: 0x009900,
+							shininess: 2,
+							shading: THREE.FlatShading}),
+							0.1, // friction
+							0.1  // restitution
+						),
+						10.0 // weight, 0 is for zero gravity
 				);
-				box_2.position.y += 20;
+				box_2.position.y += 30;
 				box_2.position.x += 4;
 				scene.add(box_2);
 				
