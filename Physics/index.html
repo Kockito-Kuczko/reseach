@@ -27,7 +27,7 @@
 			Physijs.scripts.worker = 'libs/physijs_worker.js';
 			Physijs.scripts.ammo = 'ammo.js';
 	
-			var initScene, render, renderer, scene, camera, box_1, box_2, deflector_1, deflector_2;
+			var initScene, render, renderer, scene, camera, box_1, box_2, deflector_1, deflector_2, ball;
 	
 			initScene = function() {
 				renderer = new THREE.WebGLRenderer({antialias: true});
@@ -84,7 +84,7 @@
 				scene.add(deflector_1);
 				scene.add(deflector_2);
 
-				// Box
+				// Add boxes
 				box_1 = new Physijs.BoxMesh(
 					new THREE.BoxGeometry(5, 5, 5),
 					Physijs.createMaterial( // Physijs material
@@ -119,6 +119,17 @@
 				box_2.position.y += 30;
 				box_2.position.x += 4;
 				scene.add(box_2);
+				
+				// Add a ball
+				ball = new Physijs.SphereMesh(
+					new THREE.SphereGeometry(1),
+					new THREE.MeshPhongMaterial({color: 0xff0000}),
+					2.0
+				);
+				
+				ball.position.y += 55;
+				ball.position.z += 5;
+				scene.add(ball);
 				
 				requestAnimationFrame(render);
 			};
