@@ -41,8 +41,8 @@
 				camera.lookAt(scene.position);
 				scene.add(camera);
 				
-				// Add some light
-				var ambient_light = new THREE.AmbientLight( 0x404040 ); // soft white light
+				// Add some lights
+				var ambient_light = new THREE.AmbientLight( 0x404040 );
 				scene.add(ambient_light);
 				
 				var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
@@ -59,22 +59,22 @@
 						0.4, // friction
 						0.8  // restitution
 					),
-					0.0 // weight, 0 is for zero gravity
+					0.0 // weight
 				);
 
 				deflector_1.rotation.x += Math.PI / -2.5;
 				deflector_1.position.y += 10;
 				
-				deflector_2 = new Physijs.BoxMesh( // Physijs mesh
-						new THREE.BoxGeometry(15, 15, 2), // Three.js geometry
-						Physijs.createMaterial( // Physijs material
-							new THREE.MeshLambertMaterial({ // Three.js material
+				deflector_2 = new Physijs.BoxMesh(
+						new THREE.BoxGeometry(15, 15, 2),
+						Physijs.createMaterial(
+							new THREE.MeshLambertMaterial({
 								color: 0xeeeeee
 							}),
 							0.4, // friction
 							0.8 // restitution
 						),
-						0.0 // weight, 0 is for zero gravity
+						0.0 // weight
 					);
 
 					deflector_2.rotation.x += Math.PI / 2.5;
@@ -87,7 +87,7 @@
 				// Add boxes
 				box_1 = new Physijs.BoxMesh(
 					new THREE.BoxGeometry(5, 5, 5),
-					Physijs.createMaterial( // Physijs material
+					Physijs.createMaterial(
 						new THREE.MeshLambertMaterial({
 							color: 0xffffff,
 							ambient: 0xff0303,
@@ -97,14 +97,14 @@
 							0.1, // friction
 							0.1  // restitution
 						),
-						10.0 // weight, 0 is for zero gravity
+						10.0 // weight
 				);
 				box_1.position.y += 45;
 				scene.add(box_1);
 				
 				box_2 = new Physijs.BoxMesh(
 					new THREE.BoxGeometry(5, 5, 5),
-					Physijs.createMaterial( // Physijs material
+					Physijs.createMaterial(
 						new THREE.MeshLambertMaterial({
 							color: 0xffaabb,
 							ambient: 0xff03f3,
@@ -114,7 +114,7 @@
 							0.1, // friction
 							0.1  // restitution
 						),
-						10.0 // weight, 0 is for zero gravity
+						10.0 // weight
 				);
 				box_2.position.y += 30;
 				box_2.position.x += 4;
@@ -140,7 +140,7 @@
 				requestAnimationFrame(render);
 			};
 	
-			window.onload = initScene; 
+			window.onload = initScene;
 		</script>
 	</body>
 </html>
